@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クラブ＆バー</title>
+
+  <!-- フォント読み込み (Orbitron + Lato) -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== 共通スタイル ========== */
+    :root {
+      --accent-color: #FF00FF;  /* ネオンピンク */
+      --accent-color2: #00FFFF; /* エレクトリックブルー */
+      --text-color: #fff;       /* 白文字 */
+      --bg-color: #000;         /* 黒背景 */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      text-align: center;
+      font-family: 'Lato', sans-serif;
+      /* ページ読み込み時のフェードイン */
+      animation: fadeInPage 1.2s ease-out forwards;
+      opacity: 0; /* アニメーション開始時は透明 */
+    }
+
+    /* ========== アニメーション定義 ========== */
+    @keyframes fadeInPage {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDownMenu {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========== ヘッダー部分 ========== */
+    .header {
+      position: relative;
+      background: url('sample1.png') no-repeat center top/cover;
+      height: 25vh; 
+    }
+    .header::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50px;
+      background: var(--bg-color);
+      border-radius: 50% 50% 0 0;
+    }
+
+    /* ========== ハンバーガーメニューボタン ========== */
+    .menu-btn {
+      position: fixed; 
+      top: 10px; 
+      right: 10px;
+      font-size: 3rem; 
+      background: none;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      z-index: 999;
+      font-family: 'Orbitron', sans-serif; /* 見出し系はOrbitron */
+      transition: transform 0.3s ease;
+    }
+    .menu-btn:hover {
+      transform: scale(1.1);
+      color: var(--accent-color);
+    }
+
+    /* ========== ハンバーガーメニュー ========== */
+    #menu {
+      display: none; /* 初期は非表示 */
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.95);
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    /* メニューが開いた時に適用するクラス */
+    #menu.menu-open {
+      display: flex;
+      animation: slideDownMenu 0.5s forwards;
+    }
+    #menu a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1.8rem;
+      margin: 15px;
+      font-family: 'Orbitron', sans-serif;
+      transition: color 0.3s ease;
+    }
+    #menu a:hover {
+      color: var(--accent-color2);
+    }
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: var(--text-color);
+      font-size: 3rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .close-btn:hover {
+      transform: scale(1.1);
+      color: var(--accent-color);
+    }
+
+    /* ========== メインコンテンツ部分 ========== */
+    .content {
+      background-color: var(--bg-color);
+      position: relative;
+      margin-top: -50px; 
+      padding-top: 40px;
+      border-radius: 50px 50px 0 0;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: var(--accent-color2);
+      letter-spacing: 2px;
+    }
+
+    /* ========== ダーツメーター ========== */
+    .dart-container {
+      position: relative;
+      width: 120px; 
+      height: 120px;
+      margin: 20px auto;
+    }
+    #dart {
+      position: absolute;
+      width: 120px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      transform-origin: 50% 90%;
+      transition: transform 1s ease;
+    }
+
+    /* ========== 文字の配置（回転しない） ========== */
+    .dart-label {
+      position: absolute;
+      font-size: 1rem;
+      color: #fff;
+      white-space: nowrap;
+    }
+    #label-yaya {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) translate(0, -50px);
+    }
+    #label-manin {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) translate(-45px, -45px);
+    }
+    #label-yoyaku {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) translate(45px, -45px);
+    }
+
+    .reserve-btn {
+      border: 2px solid var(--text-color);
+      background: none;
+      color: var(--text-color);
+      padding: 10px 30px;
+      font-size: 1.2rem;
+      margin: 20px auto;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+    }
+    .reserve-btn:hover {
+      box-shadow: 0 0 10px var(--accent-color);
+    }
+
+    .location {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: #bbb;
+    }
+
+    /* 区切り線 */
+    .divider {
+      width: 80%;
+      margin: 30px auto;
+      border: 0.5px solid #fff;
+    }
+
+    /* ========== ランキング＆ゲームボタン ========== */
+    .game-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin: 30px auto;
+      width: 80%;
+      max-width: 800px;
+      flex-wrap: wrap; 
+    }
+    .ranking, .game-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 10px;
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .ranking h2 {
+      margin-top: 0;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent-color);
+    }
+
+    /* ランキングに掲載される名前を縦に表示 */
+    .ranking ol {
+      list-style: decimal;
+      margin: 0;
+      padding: 0;
+    }
+    .ranking ol li {
+      margin: 5px 0;
+    }
+
+    /* ゲームボタンを小さく(スマホで) */
+    .game-btn {
+      background: url('sample4.png') no-repeat center/cover;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    /* ========== ニュース欄 ========== */
+    .news {
+      margin: 30px auto;
+      width: 80%;
+      max-width: 800px;
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    /* ========== フッター(縦配置) ========== */
+    footer {
+      background: #222;
+      padding: 20px;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column; 
+      align-items: center;
+      gap: 10px;
+    }
+    footer .footer-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* ========== スマホ向け調整 ========== */
+    @media (max-width: 600px) {
+      .game-btn {
+        width: min(30vw, 120px);
+        height: min(30vw, 120px);
+      }
+      .ranking {
+        width: 60vw;
+        min-height: min(30vw, 120px);
+      }
+      #label-manin {
+        transform: translate(-50%, -50%) translate(-90px, -90px);
+      }
+      #label-yoyaku {
+        transform: translate(-50%, -50%) translate(90px, -90px);
+      }
+    }
+
+    /* PC向け */
+    @media (min-width: 601px) {
+      .game-btn {
+        width: min(30vw, 150px);
+        height: min(30vw, 150px);
+      }
+      .ranking {
+        flex: 1;
+        min-height: min(30vw, 150px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <div class="header"></div>
+
+  <!-- ハンバーガーメニューボタン（固定） -->
+  <button class="menu-btn" onclick="openMenu()">☰</button>
+
+  <!-- ハンバーガーメニュー -->
+  <nav id="menu">
+    <span class="close-btn" onclick="closeMenu()">×</span>
+    <a href="kikaku.png">企画内容</a>
+    <a href="#">アクセス</a>
+    <a href="#">企画への声</a>
+    <a href="review.html">レビュー</a>
+  </nav>
+
+  <!-- コンテンツ -->
+  <div class="content">
+    <h1>クラブ＆バー</h1>
+
+    <!-- ダーツメーター -->
+    <div class="dart-container">
+      <span class="dart-label" id="label-yaya">やや混雑</span>
+      <span class="dart-label" id="label-manin">満員</span>
+      <span class="dart-label" id="label-yoyaku">予約不要</span>
+      <img src="dart.png" id="dart" alt="混雑度">
+    </div>
+
+    <button class="reserve-btn">予約する</button>
+    <p class="location">@4-3</p>
+
+    <!-- 区切り線 -->
+    <hr class="divider">
+
+    <!-- ランキング・ゲーム -->
+    <section class="game-section">
+      <div class="ranking">
+        <h2>ランキング</h2>
+        <ol>
+          <li>ユーザーA</li>
+          <li>ユーザーB</li>
+          <li>ユーザーC</li>
+        </ol>
+      </div>
+      <button class="game-btn"></button>
+    </section>
+
+    <!-- ニュース -->
+    <section class="news">
+      <h2>ニュース</h2>
+      <p>新しいイベントがスタートします！ぜひご参加ください。</p>
+    </section>
+  </div>
+
+  <!-- フッター（縦配置） -->
+  <footer>
+    <div class="footer-menu">
+      <a href="kikaku.png">企画内容</a>
+      <a href="#">アクセス</a>
+      <a href="#">企画への声</a>
+      <a href="review.html">レビュー</a>
+    </div>
+    <p>営業時間: 10:00～17:00 @4-3</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    function openMenu() {
+      const menu = document.getElementById('menu');
+      menu.classList.add('menu-open'); // クラス追加でアニメーション発火
+    }
+    function closeMenu() {
+      const menu = document.getElementById('menu');
+      menu.classList.remove('menu-open'); // クラス削除
+      menu.style.display = 'none'; // アニメ後に非表示に
+    }
+
+    // ダーツバレルのみをランダムで回転させる
+    // (満員 = -45deg, やや混雑 = 0deg, 予約不要 = 45deg)
+    function setCrowdLevel() {
+      const dart = document.getElementById('dart');
+      const status = ['やや混雑','満員','予約不要'];
+      const randomStatus = status[Math.floor(Math.random()*3)];
+
+      if (randomStatus === 'やや混雑'){
+        dart.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+      } else if (randomStatus === '満員'){
+        dart.style.transform = 'translate(-50%, -50%) rotate(-45deg)';
+      } else if (randomStatus === '予約不要'){
+        dart.style.transform = 'translate(-50%, -50%) rotate(45deg)';
+      }
+    }
+
+    setCrowdLevel();
+    setInterval(setCrowdLevel, 5000);
+  </script>
+
+</body>
+</html>
